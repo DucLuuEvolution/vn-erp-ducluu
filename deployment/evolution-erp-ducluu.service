@@ -1,0 +1,11 @@
+[Unit]
+Description=Evolution ERP DucLuu FastAPI
+After=network.target
+[Service]
+User=__USER__
+WorkingDirectory=__DIR__
+Environment=ERP_DATA_DIR=__DIR__/runtime-data
+ExecStart=__DIR__/.venv/bin/uvicorn api.main:app --host 127.0.0.1 --port 3000
+Restart=always
+[Install]
+WantedBy=multi-user.target

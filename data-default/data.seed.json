@@ -1,0 +1,329 @@
+{
+  "settings": {
+    "systemTitle": "Evolution Technologies ERP",
+    "companyName": "Evolution Technologies Vietnam",
+    "currency": "VND",
+    "vatPercent": 8,
+    "approverEmail": "duc.luu@evolution.ca",
+    "approvalWebhookUrl": "",
+    "autoSendVendorAfterApproval": false,
+    "defaultLanguage": "vi",
+    "defaultTheme": "light",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "logoFile": "company_logo.png"
+  },
+  "users": [
+    {
+      "name": "Admin",
+      "role": "ADMIN",
+      "employeeId": "ADM-001",
+      "active": true,
+      "email": "admin@evolution.ca",
+      "passwordHash": "pbkdf2_sha256$260000$07cd248160a37f2118b2f81fd926113e$db561fde1486d25e9fb38d2451f9df0401e9adf834563ddcd18f4a591571639f",
+      "preferredLanguage": "vi",
+      "themePreference": "light",
+      "lastLoginAt": ""
+    },
+    {
+      "name": "Purchasing",
+      "role": "PURCHASING",
+      "employeeId": "PUR-001",
+      "active": true,
+      "email": "purchasing@evolution.ca",
+      "passwordHash": "pbkdf2_sha256$260000$2bede1afac2fca2a1365a04fa282d494$6c6579a4cd71123712df42f5d5078f1979235f56330e84933c6b2d0124b21dba",
+      "preferredLanguage": "vi",
+      "themePreference": "light",
+      "lastLoginAt": ""
+    },
+    {
+      "name": "Warehouse",
+      "role": "WAREHOUSE",
+      "employeeId": "WH-001",
+      "active": true,
+      "email": "warehouse@evolution.ca",
+      "passwordHash": "pbkdf2_sha256$260000$e032edde056f437439ebbff44a39737b$be51c5adeb5bbf0b540005d345c1d30b43239fe529976b07eba4740cad7ed40b",
+      "preferredLanguage": "vi",
+      "themePreference": "light",
+      "lastLoginAt": ""
+    },
+    {
+      "name": "IQC",
+      "role": "QC",
+      "employeeId": "QC-001",
+      "active": true,
+      "email": "quality@evolution.ca",
+      "passwordHash": "pbkdf2_sha256$260000$edec0c6fcfc72b70c1a035512b6aaa79$e3d694ead4918ac602b415919e5065590483f7fb5a89e33de61711f41201ed21",
+      "preferredLanguage": "vi",
+      "themePreference": "light",
+      "lastLoginAt": ""
+    },
+    {
+      "name": "Manager",
+      "role": "MANAGER",
+      "employeeId": "MGR-001",
+      "active": true,
+      "email": "manager@evolution.ca",
+      "passwordHash": "pbkdf2_sha256$260000$4bb222f00fca01013128e854df4d02e1$5daa4bd24542f8594e565d9aa59978533c2fdb4ec9c7bec4ee8b731a9ae776c7",
+      "preferredLanguage": "vi",
+      "themePreference": "light",
+      "lastLoginAt": ""
+    }
+  ],
+  "vendors": [
+    {
+      "vendorId": "VND-APTECH",
+      "vendorName": "APTECH",
+      "email": "haipham@cnps.com.vn",
+      "paymentTerms": "30 Days after delivery",
+      "deliveryTerms": "DDP - Evolution factory",
+      "active": true
+    },
+    {
+      "vendorId": "VND-CHINA",
+      "vendorName": "CHINA VENDOR",
+      "email": "",
+      "paymentTerms": "",
+      "deliveryTerms": "",
+      "active": true
+    },
+    {
+      "vendorId": "VND-VD1",
+      "vendorName": "VD1",
+      "email": "",
+      "paymentTerms": "",
+      "deliveryTerms": "",
+      "active": true
+    },
+    {
+      "vendorId": "VND-VD2",
+      "vendorName": "VD2",
+      "email": "",
+      "paymentTerms": "",
+      "deliveryTerms": "",
+      "active": true
+    }
+  ],
+  "poTemplates": [
+    {
+      "code": "ALUMINUM_PART",
+      "name": "Aluminum Part",
+      "poType": "INVENTORY"
+    },
+    {
+      "code": "ALUMINUM_EXTRUSION",
+      "name": "Aluminum Extrusion",
+      "poType": "INVENTORY"
+    },
+    {
+      "code": "POWDER_COATING",
+      "name": "Powder Coating",
+      "poType": "INVENTORY"
+    },
+    {
+      "code": "ACCESSORIES",
+      "name": "Accessories",
+      "poType": "INVENTORY"
+    },
+    {
+      "code": "EQUIPMENT",
+      "name": "Equipment",
+      "poType": "NON_INVENTORY"
+    },
+    {
+      "code": "MAINTENANCE",
+      "name": "Maintenance",
+      "poType": "NON_INVENTORY"
+    },
+    {
+      "code": "ENGINEERING",
+      "name": "Engineering",
+      "poType": "NON_INVENTORY"
+    }
+  ],
+  "aluminumPartMaster": [
+    {
+      "drawingName": "TR-0004",
+      "drawingCode": "EV0121010104",
+      "extrusionItemCode": "RM-0058E-1",
+      "material": "A6061",
+      "fabricationItemCode": "RM-0058-12",
+      "partName": "Low Support Tube Ø 16x3.75",
+      "model": "IM",
+      "cuttingLength": "362(+/-0.5)",
+      "barLength": 1825,
+      "pcsPerBar": 5,
+      "cuttingPrice": 732,
+      "fabricationPrice": 1609,
+      "cleaningPrice": 162,
+      "imageFile": "master_images/aptech_part_1.png",
+      "active": true
+    },
+    {
+      "drawingName": "TR-0006",
+      "drawingCode": "EV0100010101",
+      "extrusionItemCode": "RM-0060E-1",
+      "material": "A6061",
+      "fabricationItemCode": "RM-0060-12",
+      "partName": "Front Fork",
+      "model": "IR/IM/IT",
+      "cuttingLength": "32(+0.05/-0.4)",
+      "barLength": 1750,
+      "pcsPerBar": 53,
+      "cuttingPrice": 0,
+      "fabricationPrice": 1750,
+      "cleaningPrice": 441,
+      "imageFile": "master_images/aptech_part_2.png",
+      "active": true
+    },
+    {
+      "drawingName": "TR-0017",
+      "drawingCode": "EV0100010103",
+      "extrusionItemCode": "RM-0061E-1",
+      "material": "A6061",
+      "fabricationItemCode": "RM-0061-12",
+      "partName": "Small bracket",
+      "model": "IR/IM/IT",
+      "cuttingLength": "32.3(+/-0.15)",
+      "barLength": 1765,
+      "pcsPerBar": 53,
+      "cuttingPrice": 732,
+      "fabricationPrice": 2289,
+      "cleaningPrice": 161,
+      "imageFile": "master_images/aptech_part_3.png",
+      "active": true
+    },
+    {
+      "drawingName": "TR-0005",
+      "drawingCode": "EV0100010102",
+      "extrusionItemCode": "RM-0037E-1",
+      "material": "A6061",
+      "fabricationItemCode": "RM-0037-12",
+      "partName": "Seat Hinge",
+      "model": "IR/IM/IT",
+      "cuttingLength": "64(+0.1/-0.2)",
+      "barLength": 2010,
+      "pcsPerBar": 30,
+      "cuttingPrice": 1050,
+      "fabricationPrice": 0,
+      "cleaningPrice": 490,
+      "imageFile": "master_images/aptech_part_4.png",
+      "active": true
+    },
+    {
+      "drawingName": "TR-0004",
+      "drawingCode": "EV0121010104-IR",
+      "extrusionItemCode": "RM-0057E-1",
+      "material": "A6061",
+      "fabricationItemCode": "RM-0057-12",
+      "partName": "Low Support Tube Ø 16x3.75",
+      "model": "IR",
+      "cuttingLength": "359.7(+/-0.3)",
+      "barLength": 1813.5,
+      "pcsPerBar": 5,
+      "cuttingPrice": 732,
+      "fabricationPrice": 1609,
+      "cleaningPrice": 162,
+      "imageFile": "master_images/aptech_part_5.png",
+      "active": true
+    },
+    {
+      "drawingName": "TR-0004",
+      "drawingCode": "EV0118010104",
+      "extrusionItemCode": "RM-0059E-1",
+      "material": "A6061",
+      "fabricationItemCode": "RM-0059-12",
+      "partName": "Low Support Tube Ø 16x3.75",
+      "model": "IT",
+      "cuttingLength": "372(+/-0.5)",
+      "barLength": 1875,
+      "pcsPerBar": 5,
+      "cuttingPrice": 732,
+      "fabricationPrice": 1609,
+      "cleaningPrice": 162,
+      "imageFile": "master_images/aptech_part_6.png",
+      "active": true
+    },
+    {
+      "drawingName": "TR-0018",
+      "drawingCode": "EV0124010115",
+      "extrusionItemCode": "RM-0230E-1",
+      "material": "A6061",
+      "fabricationItemCode": "RM-0230-12",
+      "partName": "Bracing Piece Trillium 24in",
+      "model": "IT",
+      "cuttingLength": "195(+/-0.3)",
+      "barLength": 1980,
+      "pcsPerBar": 10,
+      "cuttingPrice": 525,
+      "fabricationPrice": 4765,
+      "cleaningPrice": 196,
+      "imageFile": "master_images/aptech_part_7.png",
+      "active": true
+    }
+  ],
+  "purchaseOrders": [],
+  "receivings": [],
+  "iqc": [],
+  "ncr": [],
+  "inventory": [],
+  "audit": [],
+  "counters": {
+    "receiving": 1,
+    "iqc": 1,
+    "ncr": 1
+  },
+  "roles": {
+    "ADMIN": [
+      "DASHBOARD",
+      "ITEM",
+      "VENDOR",
+      "PO",
+      "APPROVE",
+      "RECEIVE",
+      "IQC",
+      "INVENTORY",
+      "NCR",
+      "AUDIT",
+      "COST",
+      "USER_ADMIN",
+      "SYSTEM_SETTINGS",
+      "MASTER",
+      "EXPORT",
+      "REPORTS"
+    ],
+    "MANAGER": [
+      "DASHBOARD",
+      "VENDOR",
+      "PO",
+      "APPROVE",
+      "RECEIVE",
+      "IQC",
+      "INVENTORY",
+      "NCR",
+      "AUDIT",
+      "COST",
+      "EXPORT",
+      "REPORTS"
+    ],
+    "PURCHASING": [
+      "DASHBOARD",
+      "ITEM",
+      "VENDOR",
+      "PO",
+      "COST",
+      "MASTER",
+      "EXPORT",
+      "REPORTS"
+    ],
+    "WAREHOUSE": [
+      "DASHBOARD",
+      "RECEIVE",
+      "INVENTORY"
+    ],
+    "QC": [
+      "DASHBOARD",
+      "IQC",
+      "NCR"
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "templates": [
+    {
+      "code": "ALUMINUM_PART",
+      "name": "Aluminum Part",
+      "poType": "INVENTORY",
+      "configured": false
+    },
+    {
+      "code": "ALUMINUM_EXTRUSION",
+      "name": "Aluminum Extrusion",
+      "poType": "INVENTORY",
+      "configured": true,
+      "sourceFile": "EXTRUSION_INFORMATION.xlsx",
+      "formSheet": "EXTRUSION FORM",
+      "vendorSheet": "VENDOR INFORMATION",
+      "masterSheet": "Master list"
+    },
+    {
+      "code": "WHEEL",
+      "name": "Wheel",
+      "poType": "INVENTORY",
+      "configured": false
+    },
+    {
+      "code": "ACCESSORIES",
+      "name": "Accessories",
+      "poType": "INVENTORY",
+      "configured": false
+    },
+    {
+      "code": "NON_INVENTORY",
+      "name": "Non Inventory",
+      "poType": "NON_INVENTORY",
+      "configured": true,
+      "sourceFile": "NON_INVENTORY_FORM.xlsx"
+    }
+  ]
+}
