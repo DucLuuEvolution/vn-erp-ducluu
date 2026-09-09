@@ -1,4 +1,4 @@
-import os,json,secrets,shutil,re,hashlib
+import os,json,secrets,shutil,re,hashlib,io
 from pathlib import Path
 from datetime import datetime
 from fastapi import FastAPI,Request,HTTPException,UploadFile,File
@@ -79,17 +79,54 @@ async def vendor(req:Request):
  vid='VND-'+re.sub('[^A-Z0-9]+','-',name)
  if any(v['vendorName']==name for v in d['vendors']): raise HTTPException(409,'Vendor exists')
  v={'vendorId':vid,'vendorName':name,'email':x.get('email',''),'active':True}; d['vendors'].append(v); audit(d,u,'Vendor',vid,'CREATE'); write(d); return v
-@app.post('/api/catalog/reload')
-def reload_catalog(req:Request):
- user(req,'MASTER'); wb=load_workbook(DATA/'EXTRUSION_INFORMATION.xlsx',data_only=True); vs=wb['VENDOR INFORMATION']; ms=wb['Master list']; vendors=[]; items=[]
+def _number(value):
+ try: return float(value or 0)
+ except (TypeError,ValueError): return 0.0
+
+def rebuild_catalog(workbook_source):
+ try:
+  wb=load_workbook(workbook_source,data_only=True)
+ except Exception as exc:
+  raise HTTPException(400,f'Invalid Excel file: {exc}')
+ required={'VENDOR INFORMATION','Master list'}
+ missing=required-set(wb.sheetnames)
+ if missing: raise HTTPException(400,'Missing worksheet(s): '+', '.join(sorted(missing)))
+ vs=wb['VENDOR INFORMATION']; ms=wb['Master list']; vendors=[]; items=[]
  for r in range(4,vs.max_row+1):
   code=str(vs[f'B{r}'].value or '').strip()
-  if code: vendors.append({'vendorId':'EXT-'+code,'vendorName':code,'description':str(vs[f'C{r}'].value or ''),'attn':str(vs[f'D{r}'].value or ''),'email':str(vs[f'E{r}'].value or '').replace('mailto:',''),'mobile':str(vs[f'F{r}'].value or ''),'paymentTerms':'30 Days after delivery','deliveryTerms':'DDP - Evolution factory','active':True,'templateCode':'ALUMINUM_EXTRUSION'})
- old=json.loads(CAT.read_text(encoding='utf8')); images={i['fabricationItemCode']:i.get('imageFile','') for i in old['items']}
+  if code:
+   vendors.append({'vendorId':'EXT-'+code,'vendorName':code,'description':str(vs[f'C{r}'].value or ''),'attn':str(vs[f'D{r}'].value or ''),'email':str(vs[f'E{r}'].value or '').replace('mailto:',''),'mobile':str(vs[f'F{r}'].value or ''),'paymentTerms':'30 Days after delivery','deliveryTerms':'DDP - Evolution factory','active':True,'templateCode':'ALUMINUM_EXTRUSION'})
+ old={'items':[]}
+ if CAT.exists():
+  try: old=json.loads(CAT.read_text(encoding='utf8'))
+  except Exception: pass
+ images={i.get('fabricationItemCode',''):i.get('imageFile','') for i in old.get('items',[])}
  for r in range(4,ms.max_row+1):
   drawing=str(ms[f'B{r}'].value or '').strip(); code=str(ms[f'E{r}'].value or '').strip()
-  if drawing and code: items.append({'drawingName':drawing,'drawingCode':drawing,'extrusionItemCode':str(ms[f'C{r}'].value or ''),'material':str(ms[f'D{r}'].value or ''),'fabricationItemCode':code,'partName':str(ms[f'F{r}'].value or ''),'model':str(ms[f'H{r}'].value or ''),'cuttingLength':str(ms[f'I{r}'].value or ''),'barLength':float(ms[f'J{r}'].value or 0),'pcsPerBar':float(ms[f'K{r}'].value or 0),'cuttingPrice':float(ms[f'L{r}'].value or 0),'fabricationPrice':float(ms[f'M{r}'].value or 0),'cleaningPrice':float(ms[f'N{r}'].value or 0),'active':True,'templateCode':'ALUMINUM_EXTRUSION','imageFile':images.get(code,'')})
- CAT.write_text(json.dumps({'vendors':vendors,'items':items,'loadedAt':datetime.now().isoformat()},ensure_ascii=False,indent=2),encoding='utf8'); return {'vendors':len(vendors),'items':len(items)}
+  if drawing and code:
+   items.append({'drawingName':drawing,'drawingCode':drawing,'extrusionItemCode':str(ms[f'C{r}'].value or ''),'material':str(ms[f'D{r}'].value or ''),'fabricationItemCode':code,'partName':str(ms[f'F{r}'].value or ''),'model':str(ms[f'H{r}'].value or ''),'cuttingLength':str(ms[f'I{r}'].value or ''),'barLength':_number(ms[f'J{r}'].value),'pcsPerBar':_number(ms[f'K{r}'].value),'cuttingPrice':_number(ms[f'L{r}'].value),'fabricationPrice':_number(ms[f'M{r}'].value),'cleaningPrice':_number(ms[f'N{r}'].value),'active':True,'templateCode':'ALUMINUM_EXTRUSION','imageFile':images.get(code,'')})
+ payload={'vendors':vendors,'items':items,'loadedAt':datetime.now().astimezone().isoformat()}
+ tmp=CAT.with_suffix('.tmp'); tmp.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding='utf8'); tmp.replace(CAT)
+ return payload
+
+@app.post('/api/master/import')
+async def import_master(req:Request):
+ u=user(req,'MASTER'); raw=await req.body()
+ if not raw: raise HTTPException(400,'Excel file is required')
+ if len(raw)>25*1024*1024: raise HTTPException(413,'Excel file is too large')
+ parsed=rebuild_catalog(io.BytesIO(raw))
+ source=DATA/'EXTRUSION_INFORMATION.xlsx'; tmp=DATA/'EXTRUSION_INFORMATION.upload.tmp.xlsx'
+ tmp.write_bytes(raw); tmp.replace(source)
+ d=read(); audit(d,u,'MASTER','EXTRUSION_INFORMATION.xlsx','IMPORT',f"{len(parsed['items'])} items; {len(parsed['vendors'])} vendors"); write(d)
+ return {'ok':True,'items':len(parsed['items']),'vendors':len(parsed['vendors']),'loadedAt':parsed['loadedAt']}
+
+@app.post('/api/catalog/reload')
+def reload_catalog(req:Request):
+ u=user(req,'MASTER'); source=DATA/'EXTRUSION_INFORMATION.xlsx'
+ if not source.exists(): raise HTTPException(404,'Configured Excel source not found')
+ parsed=rebuild_catalog(source)
+ d=read(); audit(d,u,'MASTER','EXTRUSION_INFORMATION.xlsx','RELOAD',f"{len(parsed['items'])} items; {len(parsed['vendors'])} vendors"); write(d)
+ return {'items':len(parsed['items']),'vendors':len(parsed['vendors']),'loadedAt':parsed['loadedAt']}
 @app.get('/api/price-history')
 def price(req:Request,itemCode:str=''):
  user(req); d=read(); out=[{'poNumber':p['poNumber'],'date':p['orderDate'],'vendorId':p['vendorId'],'unitPrice':l['totalUnitPrice']} for p in d['purchaseOrders'] for l in p['lines'] if l.get('itemCode')==itemCode]; return sorted(out,key=lambda x:x['date'],reverse=True)
